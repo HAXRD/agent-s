@@ -1,0 +1,128 @@
+task_groups:
+  - name: 1.1 后端项目初始化
+    claude_code_subagent: 后端专家
+    standards:
+      - global/*
+      - backend/*
+      - testing/*
+  - name: 1.2 前端项目初始化
+    claude_code_subagent: 前端专家
+    standards:
+      - global/*
+      - frontend/*
+      - testing/*
+  - name: 1.3 数据库设计和迁移
+    claude_code_subagent: 全栈专家
+    standards:
+      - global/*
+      - backend/*
+      - frontend/*
+      - testing/*
+  - name: 1.4 启停脚本创建
+    claude_code_subagent: 全栈专家
+    standards:
+      - global/*
+      - backend/*
+      - frontend/*
+      - testing/*
+  - name: 2.1 Binance API 集成
+    claude_code_subagent: 后端专家
+    standards:
+      - global/*
+      - backend/*
+      - testing/*
+  - name: 2.2 数据存储逻辑
+    claude_code_subagent: 后端专家
+    standards:
+      - global/*
+      - backend/*
+      - testing/*
+  - name: 2.3 WebSocket 服务实现
+    claude_code_subagent: 后端专家
+    standards:
+      - global/*
+      - backend/*
+      - testing/*
+  - name: 2.4 RESTful API 实现
+    claude_code_subagent: 后端专家
+    standards:
+      - global/*
+      - backend/*
+      - testing/*
+  - name: 2.5 主程序集成
+    claude_code_subagent: 后端专家
+    standards:
+      - global/*
+      - backend/*
+      - testing/*
+  - name: 3.1 API Service 实现
+    claude_code_subagent: 前端专家
+    standards:
+      - global/*
+      - frontend/*
+      - testing/*
+  - name: 3.2 WebSocket Hook 实现
+    claude_code_subagent: 前端专家
+    standards:
+      - global/*
+      - frontend/*
+      - testing/*
+  - name: 3.3 K线图组件实现
+    claude_code_subagent: 前端专家
+    standards:
+      - global/*
+      - frontend/*
+      - testing/*
+  - name: 3.4 代币对选择组件
+    claude_code_subagent: 前端专家
+    standards:
+      - global/*
+      - frontend/*
+      - testing/*
+  - name: 3.5 时间粒度选择组件
+    claude_code_subagent: 前端专家
+    standards:
+      - global/*
+      - frontend/*
+      - testing/*
+  - name: 3.6 价格显示组件
+    claude_code_subagent: 前端专家
+    standards:
+      - global/*
+      - frontend/*
+      - testing/*
+  - name: 3.7 主应用集成
+    claude_code_subagent: 前端专家
+    standards:
+      - global/*
+      - frontend/*
+      - testing/*
+  - name: 4.1 前后端集成测试
+    claude_code_subagent: 全栈专家
+    standards:
+      - global/*
+      - backend/*
+      - frontend/*
+      - testing/*
+  - name: 4.2 错误处理完善
+    claude_code_subagent: 全栈专家
+    standards:
+      - global/*
+      - backend/*
+      - frontend/*
+      - testing/*
+  - name: 4.3 性能优化
+    claude_code_subagent: 全栈专家
+    standards:
+      - global/*
+      - backend/*
+      - frontend/*
+      - testing/*
+  - name: 4.4 代码优化和文档
+    claude_code_subagent: 全栈专家
+    standards:
+      - global/*
+      - backend/*
+      - frontend/*
+      - testing/*
+
