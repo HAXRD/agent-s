@@ -208,7 +208,6 @@
 
 **目录结构：**
 ```
-backend/
 ├── cmd/
 │   └── server/
 │       └── main.go
@@ -463,6 +462,170 @@ type Kline struct {
 func (Kline) TableName() string {
     return "klines"
 }
+```
+
+### 5.4 Docker 数据库配置
+
+#### 5.4.1 Docker Compose 配置
+
+**文件：** `docker-compose.yml`
+
+```yaml
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: crypto_monitor_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: crypto_monitor
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+```
+
+#### 5.4.2 数据库初始化脚本
+
+**文件：** `scripts/init.sql`
+
+```sql
+-- 创建数据库（如果不存在）
+-- Docker 会自动创建，这里主要用于确保
+
+-- 创建扩展（如果需要）
+-- CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- 创建表
+CREATE TABLE IF NOT EXISTS klines (
+    id BIGSERIAL PRIMARY KEY,
+    symbol VARCHAR(20) NOT NULL,
+    interval VARCHAR(10) NOT NULL,
+    open_time BIGINT NOT NULL,
+    close_time BIGINT NOT NULL,
+    open_price DECIMAL(20, 8) NOT NULL,
+    high_price DECIMAL(20, 8) NOT NULL,
+    low_price DECIMAL(20, 8) NOT NULL,
+    close_price DECIMAL(20, 8) NOT NULL,
+    volume DECIMAL(20, 8) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(symbol, interval, open_time)
+);
+
+-- 创建索引
+CREATE INDEX IF NOT EXISTS idx_klines_symbol_interval_time 
+    ON klines(symbol, interval, open_time);
+CREATE INDEX IF NOT EXISTS idx_klines_symbol_interval 
+    ON klines(symbol, interval);
+```
+
+#### 5.4.3 Docker 管理脚本
+
+**文件：** `scripts/db.sh`
+
+```bash
+#!/bin/bash
+
+# 数据库 Docker 管理脚本
+
+case "$1" in
+    start)
+        echo "启动 PostgreSQL 数据库..."
+        docker-compose up -d postgres
+        echo "等待数据库就绪..."
+        sleep 5
+        echo "数据库已启动"
+        ;;
+    stop)
+        echo "停止 PostgreSQL 数据库..."
+        docker-compose stop postgres
+        echo "数据库已停止"
+        ;;
+    restart)
+        echo "重启 PostgreSQL 数据库..."
+        docker-compose restart postgres
+        echo "数据库已重启"
+        ;;
+    status)
+        echo "检查数据库状态..."
+        docker-compose ps postgres
+        ;;
+    logs)
+        echo "查看数据库日志..."
+        docker-compose logs -f postgres
+        ;;
+    shell)
+        echo "连接到 PostgreSQL 数据库..."
+        docker-compose exec postgres psql -U postgres -d crypto_monitor
+        ;;
+    reset)
+        echo "重置数据库（删除所有数据）..."
+        read -p "确认要删除所有数据吗？(y/N) " -n 1 -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            docker-compose down -v
+            docker-compose up -d postgres
+            echo "数据库已重置"
+        else
+            echo "操作已取消"
+        fi
+        ;;
+    backup)
+        BACKUP_FILE="backup_$(date +%Y%m%d_%H%M%S).sql"
+        echo "备份数据库到 $BACKUP_FILE..."
+        docker-compose exec -T postgres pg_dump -U postgres crypto_monitor > "$BACKUP_FILE"
+        echo "备份完成: $BACKUP_FILE"
+        ;;
+    restore)
+        if [ -z "$2" ]; then
+            echo "用法: $0 restore <backup_file.sql>"
+            exit 1
+        fi
+        echo "从 $2 恢复数据库..."
+        docker-compose exec -T postgres psql -U postgres -d crypto_monitor < "$2"
+        echo "恢复完成"
+        ;;
+    *)
+        echo "用法: $0 {start|stop|restart|status|logs|shell|reset|backup|restore}"
+        echo ""
+        echo "命令说明："
+        echo "  start    - 启动数据库"
+        echo "  stop     - 停止数据库"
+        echo "  restart  - 重启数据库"
+        echo "  status   - 查看数据库状态"
+        echo "  logs     - 查看数据库日志"
+        echo "  shell    - 连接到数据库命令行"
+        echo "  reset    - 重置数据库（删除所有数据）"
+        echo "  backup   - 备份数据库"
+        echo "  restore  - 从备份文件恢复数据库"
+        exit 1
+        ;;
+esac
+```
+
+#### 5.4.4 目录结构
+
+```
+.
+├── docker-compose.yml
+├── scripts/
+│   ├── init.sql
+│   └── db.sh
+└── ...
 ```
 
 ## 6. 前端设计
@@ -875,10 +1038,92 @@ npm run dev
 ```
 
 **数据库：**
-- 本地PostgreSQL运行
-- 使用Docker或直接安装
+- 使用 Docker Compose 启动 PostgreSQL
+```bash
+# 方式1：使用管理脚本
+chmod +x scripts/db.sh
+./scripts/db.sh start
 
-### 11.2 环境配置
+# 方式2：直接使用 docker-compose
+docker-compose up -d postgres
+```
+
+### 11.2 Docker 数据库使用
+
+#### 11.2.1 快速启动
+
+**首次启动：**
+```bash
+# 启动数据库（会自动创建表结构）
+docker-compose up -d postgres
+
+# 查看日志确认启动成功
+docker-compose logs postgres
+```
+
+**使用管理脚本：**
+```bash
+# 给脚本添加执行权限（首次使用）
+chmod +x scripts/db.sh
+
+# 启动数据库
+./scripts/db.sh start
+
+# 查看状态
+./scripts/db.sh status
+
+# 查看日志
+./scripts/db.sh logs
+
+# 连接到数据库
+./scripts/db.sh shell
+```
+
+#### 11.2.2 数据库操作
+
+**备份数据库：**
+```bash
+./scripts/db.sh backup
+# 或手动备份
+docker-compose exec -T postgres pg_dump -U postgres crypto_monitor > backup.sql
+```
+
+**恢复数据库：**
+```bash
+./scripts/db.sh restore backup.sql
+# 或手动恢复
+docker-compose exec -T postgres psql -U postgres -d crypto_monitor < backup.sql
+```
+
+**重置数据库：**
+```bash
+./scripts/db.sh reset
+# 或手动重置
+docker-compose down -v
+docker-compose up -d postgres
+```
+
+#### 11.2.3 环境变量配置
+
+可以通过环境变量或 `.env` 文件自定义数据库配置：
+
+**`.env` 文件示例：**
+```env
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+POSTGRES_DB=crypto_monitor
+POSTGRES_PORT=5432
+```
+
+**更新 `docker-compose.yml` 使用环境变量：**
+```yaml
+environment:
+  POSTGRES_USER: ${POSTGRES_USER:-postgres}
+  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+  POSTGRES_DB: ${POSTGRES_DB:-crypto_monitor}
+```
+
+### 11.3 环境配置
 
 **后端环境变量：**
 ```
