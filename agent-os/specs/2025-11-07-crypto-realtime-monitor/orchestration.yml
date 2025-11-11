@@ -18,7 +18,13 @@ task_groups:
       - backend/*
       - frontend/*
       - testing/*
-  - name: 1.4 启停脚本创建
+  - name: 1.4 Docker 数据库配置
+    claude_code_subagent: 全栈专家
+    standards:
+      - global/*
+      - backend/*
+      - testing/*
+  - name: 1.5 启停脚本创建
     claude_code_subagent: 全栈专家
     standards:
       - global/*
