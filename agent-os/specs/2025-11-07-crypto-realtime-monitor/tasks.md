@@ -18,9 +18,9 @@
 **预估时间：** 1小时
 
 **任务：**
-- [ ] 创建后端项目目录结构
-- [ ] 初始化 Go Modules (`go mod init`)
-- [ ] 创建基础目录结构：
+- [x] 创建后端项目目录结构
+- [x] 初始化 Go Modules (`go mod init`)
+- [x] 创建基础目录结构：
   - `cmd/server/main.go`
   - `internal/api/handlers/`
   - `internal/api/routes.go`
@@ -28,13 +28,13 @@
   - `internal/repository/`
   - `internal/models/`
   - `pkg/database/`
-- [ ] 安装依赖包：
+- [x] 安装依赖包：
   - `github.com/gin-gonic/gin`
   - `gorm.io/gorm`
   - `gorm.io/driver/postgres`
   - `github.com/gorilla/websocket`
-- [ ] 创建 `.env` 文件模板
-- [ ] 创建 `README.md` 说明文档
+- [x] 创建 `.env` 文件模板
+- [x] 创建 `README.md` 说明文档
 
 ### 1.2 前端项目初始化
 **优先级：** P0  
@@ -42,20 +42,20 @@
 **预估时间：** 1小时
 
 **任务：**
-- [ ] 使用 Vite 创建 React + TypeScript 项目
-- [ ] 创建基础目录结构：
+- [x] 使用 Vite 创建 React + TypeScript 项目
+- [x] 创建基础目录结构：
   - `src/components/`
   - `src/hooks/`
   - `src/services/`
   - `src/App.tsx`
   - `src/main.tsx`
-- [ ] 安装依赖包：
+- [x] 安装依赖包：
   - `react`、`react-dom`
   - `lightweight-charts`
   - `axios` 或 `fetch`
-- [ ] 配置 Tailwind CSS（或使用简单CSS）
-- [ ] 创建 `.env` 文件模板
-- [ ] 创建 `README.md` 说明文档
+- [x] 配置 Tailwind CSS（或使用简单CSS）
+- [x] 创建 `.env` 文件模板
+- [x] 创建 `README.md` 说明文档
 
 ### 1.3 数据库设计和迁移
 **优先级：** P0  
@@ -63,16 +63,16 @@
 **预估时间：** 2小时
 
 **任务：**
-- [ ] 设计 `klines` 表结构
-- [ ] 创建 GORM 模型定义 (`internal/models/kline.go`)
-- [ ] 创建数据库迁移文件
-- [ ] 实现数据库连接配置 (`pkg/database/postgres.go`)
-- [ ] 创建数据库索引：
+- [x] 设计 `klines` 表结构
+- [x] 创建 GORM 模型定义 (`internal/models/kline.go`)
+- [x] 创建数据库迁移文件
+- [x] 实现数据库连接配置 (`pkg/database/postgres.go`)
+- [x] 创建数据库索引：
   - `(symbol, interval, open_time)` 唯一索引
   - `(symbol, interval, open_time)` 查询索引
   - `(symbol, interval)` 查询索引
-- [ ] 测试数据库连接
-- [ ] 编写数据库初始化脚本
+- [x] 测试数据库连接
+- [x] 编写数据库初始化脚本
 
 ### 1.4 Docker 数据库配置
 **优先级：** P0  
@@ -80,18 +80,18 @@
 **预估时间：** 1小时
 
 **任务：**
-- [ ] 创建 `docker-compose.yml` 文件：
+- [x] 创建 `docker-compose.yml` 文件：
   - 配置 PostgreSQL 15-alpine 服务
   - 设置环境变量（用户、密码、数据库名）
   - 配置端口映射（5432:5432）
   - 配置数据卷持久化
   - 配置健康检查
   - 配置自动重启策略
-- [ ] 创建数据库初始化脚本 (`scripts/init.sql`)：
+- [x] 创建数据库初始化脚本 (`scripts/init.sql`)：
   - 创建 `klines` 表
   - 创建所有索引
   - 使用 `IF NOT EXISTS` 确保幂等性
-- [ ] 创建数据库管理脚本 (`scripts/db.sh`)：
+- [x] 创建数据库管理脚本 (`scripts/db.sh`)：
   - 实现 `start` 命令：启动数据库
   - 实现 `stop` 命令：停止数据库
   - 实现 `restart` 命令：重启数据库
@@ -101,13 +101,13 @@
   - 实现 `reset` 命令：重置数据库（删除所有数据）
   - 实现 `backup` 命令：备份数据库
   - 实现 `restore` 命令：从备份文件恢复数据库
-- [ ] 为脚本添加执行权限 (`chmod +x scripts/db.sh`)
-- [ ] 测试 Docker 数据库功能：
+- [x] 为脚本添加执行权限 (`chmod +x scripts/db.sh`)
+- [x] 测试 Docker 数据库功能：
   - 测试启动数据库
   - 测试数据库初始化（表结构创建）
   - 测试数据库连接
   - 测试管理脚本各命令
-- [ ] 创建 `.env.example` 文件（包含数据库配置示例）
+- [x] 创建 `.env.example` 文件（包含数据库配置示例）
 
 ### 1.5 启停脚本创建
 **优先级：** P0  
@@ -115,7 +115,7 @@
 **预估时间：** 1小时
 
 **任务：**
-- [ ] 创建统一启停脚本 (`scripts/manage.sh`)：
+- [x] 创建统一启停脚本 (`scripts/manage.sh`)：
   - 支持命令：`start`, `stop`, `restart`, `status`
   - 启动后端服务：
     - 检查环境变量配置
@@ -147,15 +147,15 @@
     - 调用停止功能
     - 等待服务完全停止
     - 调用启动功能
-- [ ] 为脚本添加执行权限 (`chmod +x scripts/manage.sh`)
-- [ ] 测试脚本功能：
+- [x] 为脚本添加执行权限 (`chmod +x scripts/manage.sh`)
+- [x] 测试脚本功能：
   - 测试启动后端
   - 测试启动前端
   - 测试停止后端
   - 测试停止前端
   - 测试重启功能
   - 测试状态检查
-- [ ] 在项目根目录 README 中说明脚本使用方法
+- [x] 在项目根目录 README 中说明脚本使用方法
 
 ---
 
