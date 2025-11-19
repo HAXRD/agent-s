@@ -167,17 +167,17 @@
 **预估时间：** 4小时
 
 **任务：**
-- [ ] 创建 Binance 服务 (`internal/service/binance.go`)
-- [ ] 实现 Binance REST API 客户端
+- [x] 创建 Binance 服务 (`internal/service/binance.go`)
+- [x] 实现 Binance REST API 客户端
   - 获取历史K线数据：`GET /api/v3/klines`
   - 错误处理和重试机制（指数退避）
-- [ ] 实现 Binance WebSocket 客户端
+- [x] 实现 Binance WebSocket 客户端
   - 连接 Binance WebSocket Streams
   - 订阅K线数据流：`<symbol>@kline_<interval>`
   - 处理消息解析
-- [ ] 实现数据转换逻辑（Binance格式 → 内部模型）
-- [ ] 添加日志记录
-- [ ] 测试 Binance API 连接
+- [x] 实现数据转换逻辑（Binance格式 → 内部模型）
+- [x] 添加日志记录
+- [x] 测试 Binance API 连接
 
 ### 2.2 数据存储逻辑
 **优先级：** P0  

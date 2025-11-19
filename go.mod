@@ -4,6 +4,7 @@ go 1.25.3
 
 require (
 	github.com/gin-gonic/gin v1.10.0
+	github.com/gorilla/websocket v1.5.3
 	gorm.io/driver/postgres v1.5.9
 	gorm.io/gorm v1.25.12
 )

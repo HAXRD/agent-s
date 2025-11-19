@@ -44,13 +44,32 @@
 
 ### 1. 环境配置
 
-复制环境变量模板文件：
+**选择环境：**
+
+- **测试网（默认）**：如果没有 `.env` 文件，程序会自动使用测试网配置
+- **生产网**：复制生产网配置模板并创建 `.env` 文件
+
+**配置步骤：**
 
 ```bash
-cp .env.example .env
+# 方式一：使用测试网（无需配置，直接运行）
+# 程序会自动检测到没有 .env 文件，使用测试网配置
+
+# 方式二：使用生产网
+cp .env.prod.example .env
+# 编辑 .env 文件，根据需要修改配置
+
+# 方式三：使用测试网（显式配置）
+cp .env.test.example .env
+# 编辑 .env 文件，根据需要修改配置
 ```
 
-编辑 `.env` 文件，配置数据库连接和其他环境变量。
+**环境配置文件说明：**
+- `.env.test.example` - 测试网环境配置模板
+- `.env.prod.example` - 生产网环境配置模板
+- `.env` - 实际使用的环境配置文件（不会被提交到版本控制）
+
+**注意：** 如果没有 `.env` 文件，程序会默认使用 Binance 测试网，适合开发和测试使用。
 
 ### 2. 启动数据库
 
@@ -202,16 +221,21 @@ npm run dev
 
 ## 环境变量
 
-| 变量名 | 说明 | 默认值 |
-|--------|------|--------|
-| `DB_HOST` | 数据库主机 | localhost |
-| `DB_PORT` | 数据库端口 | 5432 |
-| `DB_USER` | 数据库用户 | postgres |
-| `DB_PASSWORD` | 数据库密码 | postgres |
-| `DB_NAME` | 数据库名称 | crypto_monitor |
-| `PORT` | 服务端口 | 8080 |
-| `BINANCE_WS_URL` | Binance WebSocket URL | wss://stream.binance.com:9443/ws |
-| `BINANCE_API_URL` | Binance API URL | https://api.binance.com |
+| 变量名 | 说明 | 默认值（无 .env 文件时） | 默认值（有 .env 文件时） |
+|--------|------|------------------------|------------------------|
+| `DB_HOST` | 数据库主机 | localhost | localhost |
+| `DB_PORT` | 数据库端口 | 5432 | 5432 |
+| `DB_USER` | 数据库用户 | postgres | postgres |
+| `DB_PASSWORD` | 数据库密码 | postgres | postgres |
+| `DB_NAME` | 数据库名称 | crypto_monitor | crypto_monitor |
+| `PORT` | 服务端口 | 8080 | 8080 |
+| `BINANCE_API_URL` | Binance API URL | https://testnet.binance.vision | https://api.binance.com |
+| `BINANCE_WS_URL` | Binance WebSocket URL | wss://stream.testnet.binance.vision/ws | wss://stream.binance.com:9443/ws |
+
+**重要提示：**
+- 如果没有 `.env` 文件，程序会自动使用 **Binance 测试网**配置
+- 测试网适合开发和测试，不会产生真实交易
+- 生产环境请务必创建 `.env` 文件并配置正确的生产网地址
 
 ## 许可证
 
