@@ -15,6 +15,31 @@ import (
 	"github.com/gorilla/websocket"
 )
 
+// FlexibleString can unmarshal from both string and number JSON types
+type FlexibleString string
+
+// UnmarshalJSON allows FlexibleString to accept both string and number types
+func (fs *FlexibleString) UnmarshalJSON(data []byte) error {
+	var str string
+	if err := json.Unmarshal(data, &str); err == nil {
+		*fs = FlexibleString(str)
+		return nil
+	}
+
+	var num float64
+	if err := json.Unmarshal(data, &num); err == nil {
+		*fs = FlexibleString(strconv.FormatFloat(num, 'f', -1, 64))
+		return nil
+	}
+
+	return fmt.Errorf("cannot unmarshal %s into FlexibleString", string(data))
+}
+
+// String returns the string value
+func (fs FlexibleString) String() string {
+	return string(fs)
+}
+
 // BinanceService handles Binance API interactions
 type BinanceService struct {
 	apiURL     string
@@ -232,16 +257,16 @@ func (s *BinanceService) SubscribeKlineStream(symbol, interval string, callback 
 			EventTime int64  `json:"E"`
 			Symbol    string `json:"s"`
 			Kline     struct {
-				StartTime  int64  `json:"t"`
-				EndTime    int64  `json:"T"`
-				Symbol     string `json:"s"`
-				Interval   string `json:"i"`
-				OpenPrice  string `json:"o"`
-				ClosePrice string `json:"c"`
-				HighPrice  string `json:"h"`
-				LowPrice   string `json:"l"`
-				Volume     string `json:"v"`
-				IsClosed   bool   `json:"x"`
+				StartTime  int64          `json:"t"`
+				EndTime    int64          `json:"T"`
+				Symbol     string         `json:"s"`
+				Interval   string         `json:"i"`
+				OpenPrice  FlexibleString `json:"o"`
+				ClosePrice FlexibleString `json:"c"`
+				HighPrice  FlexibleString `json:"h"`
+				LowPrice   FlexibleString `json:"l"`
+				Volume     FlexibleString `json:"v"`
+				IsClosed   bool           `json:"x"`
 			} `json:"k"`
 		}
 
@@ -257,11 +282,11 @@ func (s *BinanceService) SubscribeKlineStream(symbol, interval string, callback 
 				Interval:   msg.Kline.Interval,
 				OpenTime:   msg.Kline.StartTime,
 				CloseTime:  msg.Kline.EndTime,
-				OpenPrice:  parseFloat(msg.Kline.OpenPrice),
-				HighPrice:  parseFloat(msg.Kline.HighPrice),
-				LowPrice:   parseFloat(msg.Kline.LowPrice),
-				ClosePrice: parseFloat(msg.Kline.ClosePrice),
-				Volume:     parseFloat(msg.Kline.Volume),
+				OpenPrice:  parseFloat(msg.Kline.OpenPrice.String()),
+				HighPrice:  parseFloat(msg.Kline.HighPrice.String()),
+				LowPrice:   parseFloat(msg.Kline.LowPrice.String()),
+				ClosePrice: parseFloat(msg.Kline.ClosePrice.String()),
+				Volume:     parseFloat(msg.Kline.Volume.String()),
 			}
 
 			log.Printf("Received kline update: %s %s at %d", kline.Symbol, kline.Interval, kline.OpenTime)

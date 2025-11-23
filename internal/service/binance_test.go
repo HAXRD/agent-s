@@ -95,7 +95,7 @@ func TestBinanceService_WebSocketConnection(t *testing.T) {
 	timeout := time.After(10 * time.Second)
 
 	go func() {
-		err := service.SubscribeKlineStream("BTCUSDT", "1m", func(kline models.Kline) {
+		err := service.SubscribeKlineStream("BTCUSDT", "1s", func(kline models.Kline) {
 			t.Logf("Received kline: %+v", kline)
 			done <- true
 		})
