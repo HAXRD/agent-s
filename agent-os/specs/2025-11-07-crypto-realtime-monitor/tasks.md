@@ -185,15 +185,15 @@
 **预估时间：** 3小时
 
 **任务：**
-- [ ] 创建 K线数据仓库 (`internal/repository/kline.go`)
-- [ ] 实现数据存储方法：
+- [x] 创建 K线数据仓库 (`internal/repository/kline.go`)
+- [x] 实现数据存储方法：
   - `CreateKline()` - 创建K线数据
   - `CreateOrUpdateKline()` - 使用 UPSERT 逻辑
   - `GetKlines()` - 查询历史K线数据
-- [ ] 实现去重逻辑（基于 `symbol, interval, open_time`）
-- [ ] 实现批量插入优化
-- [ ] 添加错误处理（数据库连接失败时继续运行）
-- [ ] 测试数据存储功能
+- [x] 实现去重逻辑（基于 `symbol, interval, open_time`）
+- [x] 实现批量插入优化
+- [x] 添加错误处理（数据库连接失败时继续运行）
+- [x] 测试数据存储功能
 
 ### 2.3 WebSocket 服务实现
 **优先级：** P0  
@@ -201,21 +201,21 @@
 **预估时间：** 4小时
 
 **任务：**
-- [ ] 创建 WebSocket 服务 (`internal/service/websocket.go`)
-- [ ] 实现 WebSocket 连接管理：
+- [x] 创建 WebSocket 服务 (`internal/service/websocket.go`)
+- [x] 实现 WebSocket 连接管理：
   - 使用 Gorilla WebSocket 管理连接
   - 维护客户端连接池
   - 处理连接断开和清理
-- [ ] 实现订阅/取消订阅逻辑：
+- [x] 实现订阅/取消订阅逻辑：
   - 处理客户端订阅消息
   - 管理订阅列表
-- [ ] 实现消息广播：
+- [x] 实现消息广播：
   - 接收 Binance 推送的数据
   - 存储到数据库
   - 广播到所有订阅的客户端
-- [ ] 实现节流更新（每秒最多推送一次）
-- [ ] 添加连接状态管理
-- [ ] 测试 WebSocket 服务
+- [x] 实现节流更新（每秒最多推送一次）
+- [x] 添加连接状态管理
+- [x] 测试 WebSocket 服务
 
 ### 2.4 RESTful API 实现
 **优先级：** P0  
@@ -223,19 +223,19 @@
 **预估时间：** 3小时
 
 **任务：**
-- [ ] 创建 API 处理器 (`internal/api/handlers/kline.go`)
-- [ ] 实现 `GET /api/v1/klines` 端点：
+- [x] 创建 API 处理器 (`internal/api/handlers/kline.go`)
+- [x] 实现 `GET /api/v1/klines` 端点：
   - 查询参数验证（symbol, interval, start_time, end_time, limit）
   - 调用仓库方法查询数据
   - 返回JSON响应
-- [ ] 实现 `GET /api/v1/symbols` 端点：
+- [x] 实现 `GET /api/v1/symbols` 端点：
   - 返回支持的交易对列表
-- [ ] 实现统一响应格式：
+- [x] 实现统一响应格式：
   - 成功响应：`{code: 200, message: "success", data: ...}`
   - 错误响应：`{code: 400, message: "error", data: null}`
-- [ ] 添加错误处理中间件
-- [ ] 配置路由 (`internal/api/routes.go`)
-- [ ] 测试 API 端点
+- [x] 添加错误处理中间件
+- [x] 配置路由 (`internal/api/routes.go`)
+- [x] 测试 API 端点
 
 ### 2.5 主程序集成
 **优先级：** P0  
@@ -243,15 +243,15 @@
 **预估时间：** 2小时
 
 **任务：**
-- [ ] 实现主程序 (`cmd/server/main.go`)
-- [ ] 初始化数据库连接
-- [ ] 初始化 Gin 路由
-- [ ] 启动 Binance WebSocket 连接
-- [ ] 启动 WebSocket 服务
-- [ ] 启动 HTTP 服务器
-- [ ] 实现优雅关闭
-- [ ] 添加环境变量配置
-- [ ] 测试完整后端流程
+- [x] 实现主程序 (`cmd/server/main.go`)
+- [x] 初始化数据库连接
+- [x] 初始化 Gin 路由
+- [x] 启动 Binance WebSocket 连接
+- [x] 启动 WebSocket 服务
+- [x] 启动 HTTP 服务器
+- [x] 实现优雅关闭
+- [x] 添加环境变量配置
+- [x] 测试完整后端流程
 
 ---
 
